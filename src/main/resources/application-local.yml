@@ -1,0 +1,25 @@
+# 本地无 MySQL 时，用 H2 的 MySQL 兼容模式跑通功能
+# 启动：java -jar data-workshop-1.0.0.jar --spring.profiles.active=local
+server:
+  port: 8089
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:workshop;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:local-schema.sql
+
+mybatis:
+  type-aliases-package: com.studio.data.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.studio.data: DEBUG

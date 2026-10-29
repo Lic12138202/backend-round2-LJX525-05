@@ -1,0 +1,15 @@
+target/
+*.iml
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+# 不提交任何密钥/密码文件
+application-prod.yml
+.env
+
+run.log
+run.err
+run2.log
+run2.err

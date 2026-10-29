@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  RecordMapper 的 SQL 映射文件。
+  #{} 是预编译占位符（相当于 JDBC 的 ?）——安全，可防 SQL 注入，
+  千万不要写成 ${}（那是字符串拼接，有注入风险）。
+-->
+<mapper namespace="com.studio.data.mapper.RecordMapper">
+
+    <resultMap id="recordMap" type="Record">
+        <id     property="id"        column="id"/>
+        <result property="title"     column="title"/>
+        <result property="content"   column="content"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Record" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO records (title, content)
+        VALUES (#{title}, #{content})
+    </insert>
+
+    <select id="selectById" resultMap="recordMap">
+        SELECT id, title, content, created_at
+        FROM records
+        WHERE id = #{id}
+    </select>
+
+    <!-- 分页：MySQL/H2 通用的 LIMIT 写法 -->
+    <select id="selectPage" resultMap="recordMap">
+        SELECT id, title, content, created_at
+        FROM records
+        ORDER BY id DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM records
+    </select>
+
+    <!-- 标题查询走 idx_records_title 索引 -->
+    <select id="selectByTitle" resultMap="recordMap">
+        SELECT id, title, content, created_at
+        FROM records
+        WHERE title = #{title}
+    </select>
+</mapper>
